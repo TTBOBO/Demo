@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="css/danMu.css" />
+	</head>
+	<body>
+		<div class="content" id="box">
+			
+		  <div id="dm">
+		  	<div class="tDM">弹幕Demo</div>
+		  </div>
+		  <div class="idDom" id="idDom">
+		    <div id="content">
+		      <p class="title">吐槽:</p>
+		      <input type="text" class="text" id="text" placeholder="请输入你想说的话~~"/>
+		      <button type="button" class="btn" id="btn">发射!</button>
+		    </div>
+		  </div>
+		</div>
+		<script>
+			window.onload = function(){
+				pageInit();
+			}
+			
+			function pageInit(){
+				var i = 2;
+				var timer;
+				var btn = document.getElementById("btn");
+				btn.onclick = function(){
+					addbarrage();
+					setTime();
+				}
+				
+				function setTime(){
+					btn.disabled = true;
+					var t = setInterval(function(){
+						i--
+						btn.innerHTML = "请稍后"+i+"秒"
+						btn.style.background = '#ccc';
+						if(i == 0){
+							clearInterval(t);
+							btn.innerHTML = "发射！"
+							btn.style.background = '#f00';
+							btn.disabled = false;
+							i = 2;
+						}
+						setTimeout(function(){
+				  			var i = 2;
+				  		},8);
+					},1000);
+				}
+				
+				document.onkeydown = function(evt){
+					var event = evt || window.event;
+					if(event.keyCode == 13){
+						addbarrage();
+						setTime();
+					}
+				}
+				
+				var color = ['#2C3E50','#FF0000','#1E87F0','#7AC84B','#FF7F00','#9B39F4','#FF69B4'];
+				setInterval(function(){
+					 var index = parseInt(Math.random()*7);
+					document.querySelector(".tDM").style.color = color[index];
+				},1000);
+				function addbarrage(){
+					
+					clearInterval(timer);
+					var test = document.getElementById("text").value;
+					document.getElementById("text").value = "";
+					 var index = parseInt(Math.random()*7);  //生成一个0-6之间的随机数
+					 var screenW = window.innerWidth;
+					 var screenH = window.innerHeight;
+					 var max = Math.floor(screenH / 40);
+					 var height = 10 + 40 * (parseInt(Math.random() * (max + 1)) - 1);
+					 console.log(height)
+					 var span = document.createElement("span");
+					 span.style.left = screenW + 'px';
+					 span.style.top = height + 'px';
+					 span.style.color = color[index];
+					 span.innerHTML = test;
+					 var dmDom = document.getElementById("dm");
+					dmDom.appendChild(span);
+					timer = setInterval(move, 20);
+}
+
+function move() {
+	var arr = [];
+	var oSpan = document.getElementsByTagName('span');
+	for(var i = 0; i < oSpan.length; i++) {
+		arr.push(oSpan[i].offsetLeft);
+		arr[i] -= 5
+		oSpan[i].style.left = arr[i] + 'px';
+		if(arr[i] < oSpan[i].offsetWidth) {
+			var dmDom = document.getElementById('dm');
+			dmDom.removeChild(dmDom.childNodes[0]);
+//			clearInterval(timer);
+		}
+	}
+}
+}</script>
+	</body>
+</html>
